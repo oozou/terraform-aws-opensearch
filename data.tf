@@ -6,6 +6,11 @@ data "aws_route53_zone" "opensearch" {
   name = var.cluster_domain
 }
 
+data "aws_vpc" "this" {
+  count = var.vpc_id == null ? 0 : 1
+  id    = var.vpc_id
+}
+
 data "aws_iam_policy_document" "access_policy" {
   statement {
     actions   = ["es:*"]

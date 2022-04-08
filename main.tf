@@ -30,6 +30,13 @@ resource "aws_opensearch_domain" "this" {
     }
   }
 
+  dynamic "vpc_options" {
+    for_each = var.vpc_id == null ? [] : [1]
+    content {
+      subnet_ids         = var.subnets_ids
+      security_group_ids = [aws_security_group.this[0].id]
+    }
+  }
   advanced_security_options {
     enabled                        = true
     internal_user_database_enabled = var.is_internal_user_database_enabled

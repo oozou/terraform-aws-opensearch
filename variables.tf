@@ -25,6 +25,24 @@ variable "cluster_domain" {
   type        = string
 }
 
+variable "vpc_id" {
+  description = "The ID of the VPC for create security group"
+  type        = string
+  default     = null
+}
+
+variable "subnets_ids" {
+  description = "List of IDs of subnets for create opensearch cluster"
+  type        = list(string)
+  default     = null
+}
+
+variable "additional_allow_cidr" {
+  description = "cidr for allow connect to opensearch"
+  type        = list(string)
+  default     = []
+}
+
 variable "is_create_service_role" {
   description = "Indicates whether to create the service-linked role. See https://docs.aws.amazon.com/opensearch-service/latest/developerguide/slr.html"
   type        = bool
