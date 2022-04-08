@@ -25,13 +25,13 @@ variable "cluster_domain" {
   type        = string
 }
 
-variable "create_service_role" {
+variable "is_create_service_role" {
   description = "Indicates whether to create the service-linked role. See https://docs.aws.amazon.com/opensearch-service/latest/developerguide/slr.html"
   type        = bool
   default     = true
 }
 
-variable "master_instance_enabled" {
+variable "is_master_instance_enabled" {
   description = "Indicates whether dedicated master nodes are enabled for the cluster."
   type        = bool
   default     = false
@@ -71,7 +71,7 @@ variable "hot_instance_count" {
   default     = 1
 }
 
-variable "warm_instance_enabled" {
+variable "is_warm_instance_enabled" {
   description = "Indicates whether ultrawarm nodes are enabled for the cluster."
   type        = bool
   default     = true

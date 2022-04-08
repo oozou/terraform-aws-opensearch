@@ -1,5 +1,5 @@
 resource "aws_iam_service_linked_role" "this" {
-  count            = var.create_service_role ? 1 : 0
+  count            = var.is_create_service_role ? 1 : 0
   aws_service_name = "opensearchservice.amazonaws.com"
 }
 
@@ -9,16 +9,16 @@ resource "aws_opensearch_domain" "this" {
   access_policies = data.aws_iam_policy_document.access_policy.json
 
   cluster_config {
-    dedicated_master_enabled = var.master_instance_enabled
-    dedicated_master_count   = var.master_instance_enabled ? var.master_instance_count : null
-    dedicated_master_type    = var.master_instance_enabled ? var.master_instance_type : null
+    dedicated_master_enabled = var.is_master_instance_enabled
+    dedicated_master_count   = var.is_master_instance_enabled ? var.master_instance_count : null
+    dedicated_master_type    = var.is_master_instance_enabled ? var.master_instance_type : null
 
     instance_count = var.hot_instance_count
     instance_type  = var.hot_instance_type
 
-    warm_enabled = var.warm_instance_enabled
-    warm_count   = var.warm_instance_enabled ? var.warm_instance_count : null
-    warm_type    = var.warm_instance_enabled ? var.warm_instance_type : null
+    warm_enabled = var.is_warm_instance_enabled
+    warm_count   = var.is_warm_instance_enabled ? var.warm_instance_count : null
+    warm_type    = var.is_warm_instance_enabled ? var.warm_instance_type : null
 
     zone_awareness_enabled = (var.availability_zones > 1) ? true : false
 
