@@ -66,7 +66,7 @@ resource "aws_opensearch_domain" "this" {
     local.tags
   )
 
-  depends_on = [aws_iam_service_linked_role.this]
+  depends_on = [aws_iam_service_linked_role.this[0]]
 }
 
 resource "aws_route53_record" "this" {
