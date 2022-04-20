@@ -122,11 +122,11 @@ variable "encrypt_kms_key_id" {
 variable "is_internal_user_database_enabled" {
   description = " Whether the internal user database is enabled"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "master_role_arn" {
-  description = "The ARN for the master user of the cluster. If not specified, then it defaults to using the IAM user that is making the request."
+  description = "The ARN for the master user of the cluster. leave it null if dont want to change the flow for authentication"
   type        = string
   default     = null
 }
@@ -160,4 +160,19 @@ variable "tags" {
   description = "A map of tags to add to all resources."
   type        = map(string)
   default     = {}
+}
+
+variable "bootstrap_config" {
+  description = " config for bootstrap module require if not set the var.vpc_id and var.subnet_ids"
+  type = object({
+    vpc_id    = string
+    subnet_id = string
+  })
+  default = null
+}
+
+variable "additional_iam_roles" {
+  description = "aws iam roles for access to opensearch."
+  type        = list(string)
+  default     = []
 }
