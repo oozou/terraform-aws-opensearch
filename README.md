@@ -5,25 +5,30 @@ Terraform module with create OpenSearch resources on AWS.
 ## Usage
 
 ```terraform
-module "eks" {
+module "opensearch" {
   source                            = "git@github.com:oozou/terraform-aws-opensearch.git?ref=develop"
   cluster_name                      = "opensearch"
-  cluster_domain                    = "aws.example.com" #domain will be opensearch.aws.example.com
+  cluster_domain                    = "aws.waruwat.work" # route53 hostzone domain
   cluster_version                   = "OpenSearch_1.1"
+  # subnets_ids                       = ["subnet-xxx"]
+  # vpc_id                            = "vpc-xxx"
   prefix                            = "oozou"
   environment                       = "dev"
-  # subnets_ids                     = ["subnet-0def43dbc075d8752", "subnet-0972a6a0d8662f4f0", "subnet-086850caacfacff7f"]
-  # vpc_id                          = "vpc-08c02229cfe5c0348"
-  hot_instance_count                = 3
-  availability_zones                = 3
+  hot_instance_count                = 1
+  availability_zones                = 1
   is_master_instance_enabled        = false
   is_warm_instance_enabled          = false
-  is_internal_user_database_enabled = true
   master_user_name                  = "admin"
-  master_user_password              = "Admin1234@"
+  master_user_password              = "AdminOpenSearch1@"
   acm_arn                           = "arn:aws:acm:ap-southeast-1:557291035693:certificate/dda9fd68-88e0-4a7b-8f7e-29a94c10ae58"
+  bootstrap_config = {
+    vpc_id    = "vpc-xxx"
+    subnet_id = "subnet-xxx"
+  }
+  additional_iam_roles = [aws_iam_role.test_role.arn]
   tags = {
-    "key" = "value"
+    "terraform" = "true",
+    "workspace" = "local"
   }
 }
 ```
@@ -40,11 +45,13 @@ module "eks" {
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.9.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.10.0 |
 
 ## Modules
 
-No modules.
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_bootstrap"></a> [bootstrap](#module\_bootstrap) | ./modules/bootstrap | n/a |
 
 ## Resources
 
@@ -66,7 +73,9 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_acm_arn"></a> [acm\_arn](#input\_acm\_arn) | ACM certificate ARN for custom endpoint. | `string` | `""` | no |
 | <a name="input_additional_allow_cidr"></a> [additional\_allow\_cidr](#input\_additional\_allow\_cidr) | cidr for allow connect to opensearch | `list(string)` | `[]` | no |
+| <a name="input_additional_iam_roles"></a> [additional\_iam\_roles](#input\_additional\_iam\_roles) | aws iam roles for access to opensearch. | `list(string)` | `[]` | no |
 | <a name="input_availability_zones"></a> [availability\_zones](#input\_availability\_zones) | The number of availability zones for the OpenSearch cluster. Valid values: 1, 2 or 3. | `number` | `3` | no |
+| <a name="input_bootstrap_config"></a> [bootstrap\_config](#input\_bootstrap\_config) | config for bootstrap module require if not set the var.vpc\_id and var.subnet\_ids | <pre>object({<br>    vpc_id    = string<br>    subnet_id = string<br>  })</pre> | `null` | no |
 | <a name="input_cluster_domain"></a> [cluster\_domain](#input\_cluster\_domain) | The hosted zone name of the OpenSearch cluster. | `string` | n/a | yes |
 | <a name="input_cluster_name"></a> [cluster\_name](#input\_cluster\_name) | The name of the OpenSearch cluster. | `string` | `"opensearch"` | no |
 | <a name="input_cluster_version"></a> [cluster\_version](#input\_cluster\_version) | The version of OpenSearch or Elasticsearch to deploy. | `string` | `""` | no |
@@ -76,12 +85,12 @@ No modules.
 | <a name="input_hot_instance_type"></a> [hot\_instance\_type](#input\_hot\_instance\_type) | The type of EC2 instances to run for each hot node. A list of available instance types can you find at https://aws.amazon.com/en/opensearch-service/pricing/#On-Demand_instance_pricing | `string` | `"r6gd.large.search"` | no |
 | <a name="input_is_create_service_role"></a> [is\_create\_service\_role](#input\_is\_create\_service\_role) | Indicates whether to create the service-linked role. See https://docs.aws.amazon.com/opensearch-service/latest/developerguide/slr.html | `bool` | `true` | no |
 | <a name="input_is_custom_endpoint_enabled"></a> [is\_custom\_endpoint\_enabled](#input\_is\_custom\_endpoint\_enabled) | Whether to enable custom endpoint for the OpenSearch domain. | `bool` | `true` | no |
-| <a name="input_is_internal_user_database_enabled"></a> [is\_internal\_user\_database\_enabled](#input\_is\_internal\_user\_database\_enabled) | Whether the internal user database is enabled | `bool` | `false` | no |
+| <a name="input_is_internal_user_database_enabled"></a> [is\_internal\_user\_database\_enabled](#input\_is\_internal\_user\_database\_enabled) | Whether the internal user database is enabled | `bool` | `true` | no |
 | <a name="input_is_master_instance_enabled"></a> [is\_master\_instance\_enabled](#input\_is\_master\_instance\_enabled) | Indicates whether dedicated master nodes are enabled for the cluster. | `bool` | `false` | no |
 | <a name="input_is_warm_instance_enabled"></a> [is\_warm\_instance\_enabled](#input\_is\_warm\_instance\_enabled) | Indicates whether ultrawarm nodes are enabled for the cluster. | `bool` | `true` | no |
 | <a name="input_master_instance_count"></a> [master\_instance\_count](#input\_master\_instance\_count) | The number of dedicated master nodes in the cluster. | `number` | `3` | no |
 | <a name="input_master_instance_type"></a> [master\_instance\_type](#input\_master\_instance\_type) | The type of EC2 instances to run for each master node. A list of available instance types can you find at https://aws.amazon.com/en/opensearch-service/pricing/#On-Demand_instance_pricing | `string` | `"r6gd.large.search"` | no |
-| <a name="input_master_role_arn"></a> [master\_role\_arn](#input\_master\_role\_arn) | The ARN for the master user of the cluster. If not specified, then it defaults to using the IAM user that is making the request. | `string` | `null` | no |
+| <a name="input_master_role_arn"></a> [master\_role\_arn](#input\_master\_role\_arn) | The ARN for the master user of the cluster. leave it null if dont want to change the flow for authentication | `string` | `null` | no |
 | <a name="input_master_user_name"></a> [master\_user\_name](#input\_master\_user\_name) | Main user's username, which is stored in the Amazon OpenSearch Service domain's internal database. Only specify if is\_internal\_user\_database\_enabled is set to true. | `string` | `null` | no |
 | <a name="input_master_user_password"></a> [master\_user\_password](#input\_master\_user\_password) | Main user's password, which is stored in the Amazon OpenSearch Service domain's internal database. Only specify if is\_internal\_user\_database\_enabled is set to true | `string` | `null` | no |
 | <a name="input_prefix"></a> [prefix](#input\_prefix) | The prefix name of customer to be displayed in AWS console and resource | `string` | n/a | yes |
