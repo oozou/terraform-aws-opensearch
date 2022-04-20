@@ -19,8 +19,8 @@ module "opensearch" {
   is_master_instance_enabled        = false
   is_warm_instance_enabled          = false
   master_user_name                  = "admin"
-  master_user_password              = "AdminOpenSearch1@"
-  acm_arn                           = "arn:aws:acm:ap-southeast-1:557291035693:certificate/dda9fd68-88e0-4a7b-8f7e-29a94c10ae58"
+  master_user_password              = "AdminOpenSearch1@" #must be sensitive value
+  acm_arn                           = "arn:aws:acm:ap-southeast-1:xxxx"
   bootstrap_config = {
     vpc_id    = "vpc-xxx"
     subnet_id = "subnet-xxx"

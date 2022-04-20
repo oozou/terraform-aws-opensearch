@@ -141,6 +141,7 @@ variable "master_user_password" {
   description = "Main user's password, which is stored in the Amazon OpenSearch Service domain's internal database. Only specify if is_internal_user_database_enabled is set to true"
   type        = string
   default     = null
+  sensitive   = true
 }
 
 variable "is_custom_endpoint_enabled" {
