@@ -147,7 +147,7 @@ variable "master_user_password" {
 variable "is_custom_endpoint_enabled" {
   description = "Whether to enable custom endpoint for the OpenSearch domain."
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "acm_arn" {
@@ -176,4 +176,10 @@ variable "additional_iam_roles" {
   description = "aws iam roles for access to opensearch."
   type        = list(string)
   default     = []
+}
+
+variable "is_create_security_group" {
+    description = "if true will create security group for opensearch"
+    type = bool
+    default = true
 }

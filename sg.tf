@@ -1,5 +1,5 @@
 resource "aws_security_group" "this" {
-  count       = var.vpc_id == null ? 0 : 1
+  count       = var.is_create_security_group ? 1 : 0
   name        = format("%s-%s-opensearch-sg", local.prefix, var.cluster_name)
   description = "Security group for allow internal VPC interact with OpenSearch"
   vpc_id      = data.aws_vpc.this[0].id
