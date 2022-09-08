@@ -4,9 +4,9 @@ module "acm" {
 
   acms_domain_name = {
     opensearch = {
-      domain_name = "opensearch.aws.waruwat.com"
+      domain_name = "opensearch.example.com"
     }
   }
-  route53_zone_name        = "aws.waruwat.com"
+  route53_zone_name        = "example.com"
   is_automatic_verify_acms = true
 }

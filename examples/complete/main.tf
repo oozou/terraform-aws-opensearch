@@ -2,7 +2,7 @@ module "opensearch" {
   source                     = "../../"
   cluster_name               = "opensearch"
   is_custom_endpoint_enabled = true
-  cluster_domain             = "aws.waruwat.com" # route53 hostzone domain
+  cluster_domain             = "example.com" # route53 hostzone domain
   cluster_version            = "OpenSearch_1.1"
   subnets_ids                = module.vpc.private_subnet_ids
   vpc_id                     = module.vpc.vpc_id
