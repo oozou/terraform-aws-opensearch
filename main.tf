@@ -53,7 +53,7 @@ resource "aws_opensearch_domain" "this" {
     tls_security_policy = "Policy-Min-TLS-1-2-2019-07"
 
     custom_endpoint_enabled         = var.is_custom_endpoint_enabled
-    custom_endpoint                 = format("%s.%s", var.cluster_name, data.aws_route53_zone.opensearch.name)
+    custom_endpoint                 = format("%s.%s", var.cluster_name, var.cluster_domain)
     custom_endpoint_certificate_arn = var.acm_arn
   }
 
@@ -77,7 +77,8 @@ resource "aws_opensearch_domain" "this" {
 }
 
 resource "aws_route53_record" "this" {
-  zone_id = data.aws_route53_zone.opensearch.id
+  count = var.is_custom_endpoint_enabled ? 1 : 0
+  zone_id = data.aws_route53_zone.opensearch[0].id
   name    = var.cluster_name
   type    = "CNAME"
   ttl     = "60"

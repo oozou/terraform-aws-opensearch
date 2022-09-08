@@ -3,11 +3,12 @@ data "aws_region" "current" {}
 data "aws_caller_identity" "current" {}
 
 data "aws_route53_zone" "opensearch" {
+  count = var.is_custom_endpoint_enabled ? 1 : 0
   name = var.cluster_domain
 }
 
 data "aws_vpc" "this" {
-  count = var.vpc_id == null ? 0 : 1
+  count = var.is_create_security_group ? 1 : 0
   id    = var.vpc_id
 }
 
