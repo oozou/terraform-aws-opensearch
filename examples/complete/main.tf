@@ -6,8 +6,8 @@ module "opensearch" {
   cluster_version            = "OpenSearch_1.1"
   subnets_ids                = module.vpc.private_subnet_ids
   vpc_id                     = module.vpc.vpc_id
-  prefix                     = "oozou"
-  environment                = "dev"
+  prefix                     = var.prefix
+  environment                = var.environment
   hot_instance_count         = 3
   availability_zones         = 3
   is_master_instance_enabled = false
