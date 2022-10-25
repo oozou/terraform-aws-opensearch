@@ -4,7 +4,7 @@ data "aws_caller_identity" "current" {}
 
 data "aws_route53_zone" "opensearch" {
   count = var.is_custom_endpoint_enabled ? 1 : 0
-  name = var.cluster_domain
+  name  = var.cluster_domain
 }
 
 data "aws_vpc" "this" {
