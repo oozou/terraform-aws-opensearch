@@ -179,7 +179,7 @@ variable "additional_iam_roles" {
 }
 
 variable "is_create_security_group" {
-    description = "if true will create security group for opensearch"
-    type = bool
-    default = true
+  description = "if true will create security group for opensearch"
+  type        = bool
+  default     = true
 }
