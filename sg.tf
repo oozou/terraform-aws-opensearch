@@ -89,8 +89,8 @@ resource "aws_security_group_rule" "to_cluster" {
   count = var.is_create_security_group ? 1 : 0
 
   type              = "egress"
-  from_port         = var.port
-  to_port           = var.port
+  from_port         = 443
+  to_port           = 443
   protocol          = "tcp"
   security_group_id = aws_security_group.client[0].id
   description       = "Egress rule for allow traffic to rds cluster security group"
