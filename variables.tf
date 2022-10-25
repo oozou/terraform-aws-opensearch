@@ -183,3 +183,42 @@ variable "is_create_security_group" {
   type        = bool
   default     = true
 }
+
+variable "additional_opensearch_security_group_ingress_rules" {
+  type = list(object({
+    from_port                = number
+    to_port                  = number
+    protocol                 = string
+    cidr_blocks              = list(string)
+    source_security_group_id = string
+    description              = string
+  }))
+  description = "Additional ingress rule for opensearch security group."
+  default     = []
+}
+
+variable "additional_opensearch_client_security_group_ingress_rules" {
+  type = list(object({
+    from_port                = number
+    to_port                  = number
+    protocol                 = string
+    cidr_blocks              = list(string)
+    source_security_group_id = string
+    description              = string
+  }))
+  description = "Additional ingress rule for opensearch client security group."
+  default     = []
+}
+
+variable "additional_opensearch_client_security_group_egress_rules" {
+  type = list(object({
+    from_port                = number
+    to_port                  = number
+    protocol                 = string
+    cidr_blocks              = list(string)
+    source_security_group_id = string
+    description              = string
+  }))
+  description = "Additional egress rule for opensearch client security group."
+  default     = []
+}
