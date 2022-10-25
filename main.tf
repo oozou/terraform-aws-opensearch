@@ -77,7 +77,7 @@ resource "aws_opensearch_domain" "this" {
 }
 
 resource "aws_route53_record" "this" {
-  count = var.is_custom_endpoint_enabled ? 1 : 0
+  count   = var.is_custom_endpoint_enabled ? 1 : 0
   zone_id = data.aws_route53_zone.opensearch[0].id
   name    = var.cluster_name
   type    = "CNAME"
