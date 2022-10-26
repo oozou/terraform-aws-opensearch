@@ -6,11 +6,6 @@ resource "aws_iam_service_linked_role" "this" {
 resource "aws_opensearch_domain" "this" {
   depends_on = [
     aws_iam_service_linked_role.this[0],
-    aws_security_group.this[0],
-    aws_security_group_rule.from_client[0],
-    aws_security_group_rule.to_internet[0],
-    aws_security_group.client[0],
-    aws_security_group_rule.to_cluster[0]
   ]
 
   domain_name     = var.cluster_name
