@@ -14,7 +14,7 @@ All notable changes to this module will be documented in this file.
 - Add resource `aws_security_group_rule.to_cluster`
 - Add resource `aws_security_group_rule.additional_client_egress`
 - Add variables `additional_opensearch_security_group_ingress_rules`, `additional_opensearch_client_security_group_ingress_rules` and `additional_opensearch_client_security_group_egress_rules`
-- Add outputs `opensearch_security_group_id` and `opensearch_client_security_group_id`
+- Add outputs `security_group_id` and `client_security_group_id`
 
 ### Changed
 

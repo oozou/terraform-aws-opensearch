@@ -8,12 +8,12 @@ output "endpoint" {
   value       = aws_opensearch_domain.this.endpoint
 }
 
-output "opensearch_security_group_id" {
+output "security_group_id" {
   description = "Security group id for the opensearch."
   value       = try(aws_security_group.this[0].id, "")
 }
 
-output "opensearch_client_security_group_id" {
+output "client_security_group_id" {
   description = "Security group id for the opensearch client."
   value       = try(aws_security_group.client[0].id, "")
 }
