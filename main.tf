@@ -41,6 +41,15 @@ resource "aws_opensearch_domain" "this" {
       security_group_ids = [aws_security_group.this[0].id]
     }
   }
+
+  ebs_options {
+    ebs_enabled   = var.is_ebs_enabled 
+    volume_size   = var.volume_size
+    volume_type   = var.volume_type 
+    iops          = var.iops
+    throughput    = var.throughput      
+  }
+    
   advanced_security_options {
     enabled                        = true
     internal_user_database_enabled = var.is_internal_user_database_enabled

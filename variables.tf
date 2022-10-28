@@ -222,3 +222,32 @@ variable "additional_opensearch_client_security_group_egress_rules" {
   description = "Additional egress rule for opensearch client security group."
   default     = []
 }
+
+  description = "if true will add ebs"
+  type        = bool
+  default     = false
+}
+
+variable "volume_size" {
+  description = "Required if ebs_enabled is set to true. Size of EBS volumes attached to data nodes (in GiB)"
+  type        = number
+  default     = 20
+}
+
+variable "volume_type" {
+  description = "Type of EBS volumes attached to data nodes."
+  type        = string
+  default     = "gp3"
+}
+
+variable "iops" {
+  description = "Baseline input/output (I/O) performance of EBS volumes attached to data nodes. Applicable only for the GP3 and Provisioned IOPS EBS volume types."
+  type        = number
+  default     = "3000"
+}
+
+variable "throughput" {
+  description = "Type of EBS volumes attached to data nodes."
+  type        = number
+  default     = "125"
+}
