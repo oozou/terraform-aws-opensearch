@@ -223,6 +223,7 @@ variable "additional_opensearch_client_security_group_egress_rules" {
   default     = []
 }
 
+variable "is_ebs_enabled" {
   description = "if true will add ebs"
   type        = bool
   default     = false
