@@ -61,7 +61,7 @@ variable "master_instance_type" {
   default     = "r6gd.large.search"
 
   validation {
-    condition     = can(regex("^[m3|r3|i3|i2|r6gd]", var.master_instance_type))
+    condition     = can(regex("^[t3|m3|r3|i3|i2|r6gd]", var.master_instance_type))
     error_message = "The EC2 master_instance_type must provide a SSD or NVMe-based local storage."
   }
 }
@@ -78,7 +78,7 @@ variable "hot_instance_type" {
   default     = "r6gd.large.search"
 
   validation {
-    condition     = can(regex("^[m3|r3|i3|i2|r6gd]", var.hot_instance_type))
+    condition     = can(regex("^[t3|m3|r3|i3|i2|r6gd]", var.hot_instance_type))
     error_message = "The EC2 hot_instance_type must provide a SSD or NVMe-based local storage."
   }
 }
