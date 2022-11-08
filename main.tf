@@ -1,7 +1,7 @@
-resource "aws_iam_service_linked_role" "this" {
-  count            = var.is_create_service_role ? 1 : 0
-  aws_service_name = "opensearchservice.amazonaws.com"
-}
+# resource "aws_iam_service_linked_role" "this" {
+#   count            = var.is_create_service_role ? 1 : 0
+#   aws_service_name = "opensearchservice.amazonaws.com"
+# }
 
 resource "aws_opensearch_domain" "this" {
   domain_name     = var.cluster_name
@@ -28,6 +28,18 @@ resource "aws_opensearch_domain" "this" {
         availability_zone_count = zone_awareness_config.value
       }
     }
+  }
+
+  dynamic "log_publishing_options" {
+    for_each = aws_cloudwatch_log_group.this
+    content {
+      cloudwatch_log_group_arn = log_publishing_options.value.arn
+      log_type                 = "${lookup(log_publishing_options.value.tags, "Type")}" 
+      //split("/",log_publishing_options.value.name)[length(split("/",log_publishing_options.value.name)) - 1]
+
+    }
+    
+    
   }
 
   dynamic "vpc_options" {
@@ -81,7 +93,7 @@ resource "aws_opensearch_domain" "this" {
     local.tags
   )
 
-  depends_on = [aws_iam_service_linked_role.this[0]]
+  //depends_on = [aws_iam_service_linked_role.this[0]]
 }
 
 resource "aws_route53_record" "this" {
@@ -92,4 +104,50 @@ resource "aws_route53_record" "this" {
   ttl     = "60"
 
   records = [aws_opensearch_domain.this.endpoint]
+}
+
+resource "aws_cloudwatch_log_group" "example" {
+  name = "example"
+}
+
+resource "aws_cloudwatch_log_resource_policy" "example" {
+  policy_name = "example"
+
+  policy_document = <<CONFIG
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "es.amazonaws.com"
+      },
+      "Action": [
+        "logs:PutLogEvents",
+        "logs:PutLogEventsBatch",
+        "logs:CreateLogStream"
+      ],
+      "Resource": "arn:aws:logs:*"
+    }
+  ]
+}
+CONFIG
+}
+
+
+/* -------------------------------------------------------------------------- */
+/*                                 Cloudwatch                                 */
+/* -------------------------------------------------------------------------- */
+
+
+resource "aws_cloudwatch_log_group" "this" {
+  for_each = toset(var.enabled_cloudwatch_logs_exports)
+  name              = format("/aws/opensearch/%s/%s", local.identifier, each.value)
+  retention_in_days = var.cloudwatch_log_retention_in_days
+  kms_key_id        = var.cloudwatch_log_kms_key_id
+
+  tags = merge(local.tags, 
+                { "Name" = format("%s_%s", local.identifier, each.value) },
+                { "Type" = each.value }
+              )
 }

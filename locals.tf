@@ -7,4 +7,6 @@ locals {
     },
     var.tags,
   )
+  identifier = format("%s-%s-%s-opensearch", var.prefix, var.environment, "test")
 }
+

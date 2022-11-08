@@ -1,8 +1,20 @@
 #!/bin/bash -e
-# wget to update opensearch backend role
+# install dependencies packages
+echo "starting cloud init script . . ."
+sudo su
+sudo apt-get update
+sudo apt install awscli -y
+sudo apt install jq -y
 
-wget --http-user=${username} --http-password=${password} \
-  --method PUT \
+# wget to update opensearch backend role
+echo "update opensearch backend role"
+aws configure set region ${region}
+credential=$(aws secretsmanager get-secret-value  --secret-id ${os_bootstrap_secret_arn} --query SecretString --output text)
+username=$(echo $credential | jq '.username' | tr -d '"')
+password=$(echo $credential | jq '.password' | tr -d '"')
+echo "user="$username >> .wgetrc
+echo "password="$password >> .wgetrc
+wget --method PUT \
   --header 'Content-Type: application/json' \
   --body-data '{
     "users" : [ "${username}" ],
