@@ -1,9 +1,13 @@
-# resource "aws_iam_service_linked_role" "this" {
-#   count            = var.is_create_service_role ? 1 : 0
-#   aws_service_name = "opensearchservice.amazonaws.com"
-# }
+resource "aws_iam_service_linked_role" "this" {
+  count            = var.is_create_service_role ? 1 : 0
+  aws_service_name = "opensearchservice.amazonaws.com"
+}
 
 resource "aws_opensearch_domain" "this" {
+  depends_on = [
+    aws_iam_service_linked_role.this[0],
+  ]
+
   domain_name     = var.cluster_name
   engine_version  = var.cluster_version
   access_policies = data.aws_iam_policy_document.access_policy.json
@@ -49,6 +53,15 @@ resource "aws_opensearch_domain" "this" {
       security_group_ids = [aws_security_group.this[0].id]
     }
   }
+
+  ebs_options {
+    ebs_enabled   = var.is_ebs_enabled 
+    volume_size   = var.volume_size
+    volume_type   = var.volume_type 
+    iops          = var.iops
+    throughput    = var.throughput      
+  }
+    
   advanced_security_options {
     enabled                        = true
     internal_user_database_enabled = var.is_internal_user_database_enabled
@@ -93,7 +106,6 @@ resource "aws_opensearch_domain" "this" {
     local.tags
   )
 
-  //depends_on = [aws_iam_service_linked_role.this[0]]
 }
 
 resource "aws_route53_record" "this" {
