@@ -9,4 +9,6 @@ module "bootstrap" {
   password            = var.master_user_password
   backend_roles       = var.additional_iam_roles
   tags                = var.tags
+  region              = data.aws_region.current.name
 }
+

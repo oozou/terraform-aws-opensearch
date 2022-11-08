@@ -252,3 +252,26 @@ variable "throughput" {
   type        = number
   default     = "125"
 }
+
+
+variable "enabled_cloudwatch_logs_exports" {
+  description = "List of log types to enable for exporting to CloudWatch logs. If omitted, no logs will be exported. Valid values INDEX_SLOW_LOGS, SEARCH_SLOW_LOGS, ES_APPLICATION_LOGS, AUDIT_LOGS"
+  type        = list(string)
+  default     = []
+}
+
+/* -------------------------------------------------------------------------- */
+/*                            CloudWatch Log Group                            */
+/* -------------------------------------------------------------------------- */
+
+variable "cloudwatch_log_retention_in_days" {
+  description = "Retention day for cloudwatch log group"
+  type        = number
+  default     = 90
+}
+
+variable "cloudwatch_log_kms_key_id" {
+  description = "The ARN for the KMS encryption key."
+  type        = string
+  default     = null
+}
