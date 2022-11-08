@@ -3,8 +3,8 @@
 echo "starting cloud init script . . ."
 sudo su
 sudo apt-get update
-sudo apt install awscli -y
-sudo apt install jq -y
+yes | sudo DEBIAN_FRONTEND=noninteractive apt-get -yqq install awscli
+yes | sudo DEBIAN_FRONTEND=noninteractive apt-get -yqq install jq
 
 # wget to update opensearch backend role
 echo "update opensearch backend role"

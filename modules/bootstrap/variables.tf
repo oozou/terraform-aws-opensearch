@@ -56,3 +56,9 @@ variable "region" {
   type     = string
   sensitive = true
 }
+
+variable "additional_sg_attacment_ids" {
+  description = "(Optional) The ID of the security group."
+  type        = list(string)
+  default     = []
+}

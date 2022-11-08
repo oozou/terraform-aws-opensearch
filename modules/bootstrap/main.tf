@@ -1,17 +1,18 @@
 module "ec2" {
-  source                    = "oozou/ec2-instance/aws"
-  version                   = "1.0.5"
-  prefix                    = var.prefix
-  environment               = var.environment
-  name                      = "os-bootstrap"
-  ami                       = data.aws_ami.ubuntu.id
-  vpc_id                    = var.vpc_id
-  subnet_id                 = var.subnet_id
-  is_batch_run              = true
-  is_create_default_profile = true
-  override_profile_policy   = [data.aws_iam_policy_document.this.json]
-  user_data                 = data.template_cloudinit_config.user_data.rendered
-  tags                      = var.tags
+  source                      = "oozou/ec2-instance/aws"
+  version                     = "1.0.5"
+  prefix                      = var.prefix
+  environment                 = var.environment
+  name                        = "os-bootstrap"
+  ami                         = data.aws_ami.ubuntu.id
+  vpc_id                      = var.vpc_id
+  subnet_id                   = var.subnet_id
+  is_batch_run                = true
+  is_create_default_profile   = true
+  override_profile_policy     = [data.aws_iam_policy_document.this.json]
+  user_data                   = data.template_cloudinit_config.user_data.rendered
+  additional_sg_attacment_ids = var.additional_sg_attacment_ids
+  tags                        = var.tags
 }
 
 resource "aws_secretsmanager_secret" "terraform_key" {
