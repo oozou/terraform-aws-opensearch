@@ -4,6 +4,10 @@ resource "aws_iam_service_linked_role" "this" {
 }
 
 resource "aws_opensearch_domain" "this" {
+  depends_on = [
+    aws_iam_service_linked_role.this[0],
+  ]
+
   domain_name     = var.cluster_name
   engine_version  = var.cluster_version
   access_policies = data.aws_iam_policy_document.access_policy.json
@@ -30,6 +34,17 @@ resource "aws_opensearch_domain" "this" {
     }
   }
 
+  dynamic "log_publishing_options" {
+    for_each = aws_cloudwatch_log_group.this
+    content {
+      cloudwatch_log_group_arn = log_publishing_options.value.arn
+      log_type                 = "${lookup(log_publishing_options.value.tags, "Type")}" 
+
+    }
+    
+    
+  }
+
   dynamic "vpc_options" {
     for_each = var.vpc_id == null ? [] : [1]
     content {
@@ -37,6 +52,15 @@ resource "aws_opensearch_domain" "this" {
       security_group_ids = [aws_security_group.this[0].id]
     }
   }
+
+  ebs_options {
+    ebs_enabled   = var.is_ebs_enabled 
+    volume_size   = var.volume_size
+    volume_type   = var.volume_type 
+    iops          = var.iops
+    throughput    = var.throughput      
+  }
+    
   advanced_security_options {
     enabled                        = true
     internal_user_database_enabled = var.is_internal_user_database_enabled
@@ -48,13 +72,6 @@ resource "aws_opensearch_domain" "this" {
     }
   }
 
-  ebs_options {
-    ebs_enabled   = var.is_ebs_enabled 
-    volume_size   = var.volume_size
-    volume_type   = var.volume_type 
-    iops          = var.iops
-    throughput    = var.throughput      
-  }
 
   domain_endpoint_options {
     enforce_https       = true
@@ -81,7 +98,6 @@ resource "aws_opensearch_domain" "this" {
     local.tags
   )
 
-  depends_on = [aws_iam_service_linked_role.this[0]]
 }
 
 resource "aws_route53_record" "this" {
@@ -92,4 +108,50 @@ resource "aws_route53_record" "this" {
   ttl     = "60"
 
   records = [aws_opensearch_domain.this.endpoint]
+}
+
+resource "aws_cloudwatch_log_group" "example" {
+  name = "example"
+}
+
+resource "aws_cloudwatch_log_resource_policy" "example" {
+  policy_name = "example"
+
+  policy_document = <<CONFIG
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "es.amazonaws.com"
+      },
+      "Action": [
+        "logs:PutLogEvents",
+        "logs:PutLogEventsBatch",
+        "logs:CreateLogStream"
+      ],
+      "Resource": "arn:aws:logs:*"
+    }
+  ]
+}
+CONFIG
+}
+
+
+/* -------------------------------------------------------------------------- */
+/*                                 Cloudwatch                                 */
+/* -------------------------------------------------------------------------- */
+
+
+resource "aws_cloudwatch_log_group" "this" {
+  for_each = toset(var.enabled_cloudwatch_logs_exports)
+  name              = format("/aws/opensearch/%s/%s", local.identifier, each.value)
+  retention_in_days = var.cloudwatch_log_retention_in_days
+  kms_key_id        = var.cloudwatch_log_kms_key_id
+
+  tags = merge(local.tags, 
+                { "Name" = format("%s_%s", local.identifier, each.value) },
+                { "Type" = each.value }
+              )
 }

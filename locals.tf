@@ -1,5 +1,6 @@
 locals {
   prefix = format("%s-%s", var.prefix, var.environment)
+
   tags = merge(
     {
       "Environment" = var.environment,
@@ -7,4 +8,6 @@ locals {
     },
     var.tags,
   )
+  identifier = format("%s-%s-%s-opensearch", var.prefix, var.environment, "test")
 }
+

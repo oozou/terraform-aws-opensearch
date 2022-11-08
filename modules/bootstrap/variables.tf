@@ -44,3 +44,21 @@ variable "backend_roles" {
   type        = list(string)
   default     = []
 }
+
+variable "kms_key_id" {
+  description = "ARN or Id of the AWS KMS key to be used to encrypt the secret values in the versions stored in this secret. If you don't specify this value, then Secrets Manager defaults to using the AWS account's default KMS key (the one named aws/secretsmanager"
+  type        = string
+  default     = ""
+}
+
+variable "region" {
+  description = "AWS account region"
+  type     = string
+  sensitive = true
+}
+
+variable "additional_sg_attacment_ids" {
+  description = "(Optional) The ID of the security group."
+  type        = list(string)
+  default     = []
+}

@@ -61,7 +61,7 @@ variable "master_instance_type" {
   default     = "r6gd.large.search"
 
   validation {
-    condition     = can(regex("^[m3|r3|i3|i2|r6gd]", var.master_instance_type))
+    condition     = can(regex("^[t3|m3|r3|i3|i2|r6gd]", var.master_instance_type))
     error_message = "The EC2 master_instance_type must provide a SSD or NVMe-based local storage."
   }
 }
@@ -78,7 +78,7 @@ variable "hot_instance_type" {
   default     = "r6gd.large.search"
 
   validation {
-    condition     = can(regex("^[m3|r3|i3|i2|r6gd]", var.hot_instance_type))
+    condition     = can(regex("^[t3|m3|r3|i3|i2|r6gd]", var.hot_instance_type))
     error_message = "The EC2 hot_instance_type must provide a SSD or NVMe-based local storage."
   }
 }
@@ -184,6 +184,45 @@ variable "is_create_security_group" {
   default     = true
 }
 
+variable "additional_opensearch_security_group_ingress_rules" {
+  type = list(object({
+    from_port                = number
+    to_port                  = number
+    protocol                 = string
+    cidr_blocks              = list(string)
+    source_security_group_id = string
+    description              = string
+  }))
+  description = "Additional ingress rule for opensearch security group."
+  default     = []
+}
+
+variable "additional_opensearch_client_security_group_ingress_rules" {
+  type = list(object({
+    from_port                = number
+    to_port                  = number
+    protocol                 = string
+    cidr_blocks              = list(string)
+    source_security_group_id = string
+    description              = string
+  }))
+  description = "Additional ingress rule for opensearch client security group."
+  default     = []
+}
+
+variable "additional_opensearch_client_security_group_egress_rules" {
+  type = list(object({
+    from_port                = number
+    to_port                  = number
+    protocol                 = string
+    cidr_blocks              = list(string)
+    source_security_group_id = string
+    description              = string
+  }))
+  description = "Additional egress rule for opensearch client security group."
+  default     = []
+}
+
 variable "is_ebs_enabled" {
   description = "if true will add ebs"
   type        = bool
@@ -212,4 +251,27 @@ variable "throughput" {
   description = "Type of EBS volumes attached to data nodes."
   type        = number
   default     = "125"
+}
+
+
+variable "enabled_cloudwatch_logs_exports" {
+  description = "List of log types to enable for exporting to CloudWatch logs. If omitted, no logs will be exported. Valid values INDEX_SLOW_LOGS, SEARCH_SLOW_LOGS, ES_APPLICATION_LOGS, AUDIT_LOGS"
+  type        = list(string)
+  default     = []
+}
+
+/* -------------------------------------------------------------------------- */
+/*                            CloudWatch Log Group                            */
+/* -------------------------------------------------------------------------- */
+
+variable "cloudwatch_log_retention_in_days" {
+  description = "Retention day for cloudwatch log group"
+  type        = number
+  default     = 90
+}
+
+variable "cloudwatch_log_kms_key_id" {
+  description = "The ARN for the KMS encryption key."
+  type        = string
+  default     = null
 }

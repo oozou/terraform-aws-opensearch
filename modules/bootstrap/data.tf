@@ -19,6 +19,10 @@ data "template_file" "scripts" {
   vars = {
     username            = var.username
     password            = var.password
+
+    region                   = var.region
+    os_bootstrap_secret_arn = aws_secretsmanager_secret.terraform_key.arn
+
     backend_roles       = "[ ${join(", ", [for s in var.backend_roles : format("%q", s)])} ]"
     opensearch_endpoint = var.opensearch_endpoint
   }
@@ -43,5 +47,12 @@ data "template_cloudinit_config" "user_data" {
     filename     = "user_data.sh"
     content_type = "text/x-shellscript"
     content      = data.template_file.scripts.rendered
+  }
+}
+
+data "aws_iam_policy_document" "this" {
+  statement {
+    actions   = ["secretsmanager:GetSecretValue"]
+    resources = ["*"]
   }
 }
