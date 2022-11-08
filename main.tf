@@ -39,7 +39,6 @@ resource "aws_opensearch_domain" "this" {
     content {
       cloudwatch_log_group_arn = log_publishing_options.value.arn
       log_type                 = "${lookup(log_publishing_options.value.tags, "Type")}" 
-      //split("/",log_publishing_options.value.name)[length(split("/",log_publishing_options.value.name)) - 1]
 
     }
     
@@ -73,13 +72,6 @@ resource "aws_opensearch_domain" "this" {
     }
   }
 
-  ebs_options {
-    ebs_enabled   = var.is_ebs_enabled 
-    volume_size   = var.volume_size
-    volume_type   = var.volume_type 
-    iops          = var.iops
-    throughput    = var.throughput      
-  }
 
   domain_endpoint_options {
     enforce_https       = true

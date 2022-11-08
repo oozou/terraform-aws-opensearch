@@ -2,6 +2,19 @@
 
 All notable changes to this module will be documented in this file.
 
+## [v1.0.2] - 2022-11-08
+
+### Added
+
+- Add resource `aws_cloudwatch_log_group.this`
+- Add log_publishing_options for `aws_opensearch_domain`
+
+### Changed
+- change bootstrap to user-data to get username/password from secret manager
+- create bootstrap only if backend role list is not empty
+- update OS aws_iam_policy_document principals to account scope
+
+
 ## [v1.0.1] - 2022-10-27
 
 ### Added

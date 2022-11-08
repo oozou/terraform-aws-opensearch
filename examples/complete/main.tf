@@ -13,6 +13,8 @@ module "opensearch" {
   is_master_instance_enabled = false
   is_warm_instance_enabled   = false
   is_create_service_role     = false
+  hot_instance_type          = "t3.small.search"
+  is_ebs_enabled             = true
   master_user_name           = "admin"
   master_user_password       = "AdminOpenSearchExample1@" #must be sensitive value
   enabled_cloudwatch_logs_exports = ["INDEX_SLOW_LOGS", "SEARCH_SLOW_LOGS","ES_APPLICATION_LOGS","AUDIT_LOGS"]
