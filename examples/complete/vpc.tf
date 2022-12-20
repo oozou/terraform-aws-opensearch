@@ -8,7 +8,7 @@ module "vpc" {
   private_subnets              = ["10.105.60.0/22", "10.105.64.0/22", "10.105.68.0/22"]
   public_subnets               = ["10.105.0.0/24", "10.105.1.0/24", "10.105.2.0/24"]
   database_subnets             = ["10.105.20.0/23", "10.105.22.0/23", "10.105.24.0/23"]
-  availability_zone            = ["us-east-2a", "us-east-2b", "us-east-2c"]
+  availability_zone            = ["us-east-1a", "us-east-1b", "us-east-1c"]
   is_enable_dns_hostnames      = true
   is_enable_dns_support        = true
   is_create_nat_gateway        = true
