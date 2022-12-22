@@ -9,5 +9,16 @@ locals {
     var.tags,
   )
   identifier = format("%s-%s-%s-opensearch", var.prefix, var.environment, "test")
+
+  /* -------------------------------------------------------------------------- */
+  /*                                    Alarms                                  */
+  /* -------------------------------------------------------------------------- */
+    comparison_operators = {
+      ">=" = "GreaterThanOrEqualToThreshold",
+      ">"  = "GreaterThanThreshold",
+      "<"  = "LessThanThreshold",
+      "<=" = "LessThanOrEqualToThreshold",
+    }
+
 }
 

@@ -25,5 +25,15 @@ module "opensearch" {
   }
   additional_iam_roles = ["arn:aws:iam::855546030651:role/sbth-dev-bpc-ecs-access-role"]
   tags                 = var.tags
-
+  is_enable_default_alarms = true
+    custom_opensearch_alarms_configure = {
+      cpu_utilization_too_high = {
+        metric_name         = "CPUUtilization"
+        statistic           = "Average"
+        comparison_operator = ">="
+        threshold           = "85"
+        period              = "300"
+        evaluation_periods  = "1"
+      }
+    }
 }

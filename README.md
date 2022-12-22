@@ -52,6 +52,7 @@ module "opensearch" {
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_bootstrap"></a> [bootstrap](#module\_bootstrap) | ./modules/bootstrap | n/a |
+| <a name="module_custom_opensearch_alarms"></a> [custom\_opensearch\_alarms](#module\_custom\_opensearch\_alarms) | oozou/cloudwatch-alarm/aws | 1.0.0 |
 
 ## Resources
 
@@ -60,6 +61,10 @@ module "opensearch" {
 | [aws_cloudwatch_log_group.example](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
 | [aws_cloudwatch_log_group.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
 | [aws_cloudwatch_log_resource_policy.example](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_resource_policy) | resource |
+| [aws_cloudwatch_metric_alarm.opensearch_cpu_alarm](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) | resource |
+| [aws_cloudwatch_metric_alarm.opensearch_health_alarm](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) | resource |
+| [aws_cloudwatch_metric_alarm.opensearch_memory_alarm](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) | resource |
+| [aws_cloudwatch_metric_alarm.opensearch_storage_low_alarm](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) | resource |
 | [aws_iam_service_linked_role.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_service_linked_role) | resource |
 | [aws_opensearch_domain.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/opensearch_domain) | resource |
 | [aws_route53_record.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route53_record) | resource |
@@ -94,6 +99,9 @@ module "opensearch" {
 | <a name="input_cluster_domain"></a> [cluster\_domain](#input\_cluster\_domain) | The hosted zone name of the OpenSearch cluster. | `string` | n/a | yes |
 | <a name="input_cluster_name"></a> [cluster\_name](#input\_cluster\_name) | The name of the OpenSearch cluster. | `string` | `"opensearch"` | no |
 | <a name="input_cluster_version"></a> [cluster\_version](#input\_cluster\_version) | The version of OpenSearch or Elasticsearch to deploy. | `string` | `""` | no |
+| <a name="input_custom_opensearch_alarms_configure"></a> [custom\_opensearch\_alarms\_configure](#input\_custom\_opensearch\_alarms\_configure) | custom\_opensearch\_alarms\_configure = {<br>      cpu\_utilization\_too\_high = {<br>        metric\_name         = "CPUUtilization"<br>        statistic           = "Average"<br>        comparison\_operator = ">="<br>        threshold           = "85"<br>        period              = "300"<br>        evaluation\_periods  = "1"<br>        alarm\_actions       = [sns\_topic\_arn]<br>        ok\_actions       = [sns\_topic\_arn]<br>      }<br>    } | `any` | `{}` | no |
+| <a name="input_default_alarm_actions"></a> [default\_alarm\_actions](#input\_default\_alarm\_actions) | The list of actions to execute when this alarm transitions into an ALARM state from any other state. Each action is specified as an Amazon Resource Name (ARN). | `list(string)` | `[]` | no |
+| <a name="input_default_ok_actions"></a> [default\_ok\_actions](#input\_default\_ok\_actions) | The list of actions to execute when this alarm transitions into an OK state from any other state. Each action is specified as an Amazon Resource Name (ARN). | `list(string)` | `[]` | no |
 | <a name="input_enabled_cloudwatch_logs_exports"></a> [enabled\_cloudwatch\_logs\_exports](#input\_enabled\_cloudwatch\_logs\_exports) | List of log types to enable for exporting to CloudWatch logs. If omitted, no logs will be exported. Valid values INDEX\_SLOW\_LOGS, SEARCH\_SLOW\_LOGS, ES\_APPLICATION\_LOGS, AUDIT\_LOGS | `list(string)` | `[]` | no |
 | <a name="input_encrypt_kms_key_id"></a> [encrypt\_kms\_key\_id](#input\_encrypt\_kms\_key\_id) | The KMS key ID to encrypt the OpenSearch cluster with. If not specified, then it defaults to using the AWS OpenSearch Service KMS key. | `string` | `""` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | To manage a resources with tags | `string` | n/a | yes |
@@ -104,6 +112,7 @@ module "opensearch" {
 | <a name="input_is_create_service_role"></a> [is\_create\_service\_role](#input\_is\_create\_service\_role) | Indicates whether to create the service-linked role. See https://docs.aws.amazon.com/opensearch-service/latest/developerguide/slr.html | `bool` | `true` | no |
 | <a name="input_is_custom_endpoint_enabled"></a> [is\_custom\_endpoint\_enabled](#input\_is\_custom\_endpoint\_enabled) | Whether to enable custom endpoint for the OpenSearch domain. | `bool` | `false` | no |
 | <a name="input_is_ebs_enabled"></a> [is\_ebs\_enabled](#input\_is\_ebs\_enabled) | if true will add ebs | `bool` | `false` | no |
+| <a name="input_is_enable_default_alarms"></a> [is\_enable\_default\_alarms](#input\_is\_enable\_default\_alarms) | if enable the default alarms | `bool` | `false` | no |
 | <a name="input_is_internal_user_database_enabled"></a> [is\_internal\_user\_database\_enabled](#input\_is\_internal\_user\_database\_enabled) | Whether the internal user database is enabled | `bool` | `true` | no |
 | <a name="input_is_master_instance_enabled"></a> [is\_master\_instance\_enabled](#input\_is\_master\_instance\_enabled) | Indicates whether dedicated master nodes are enabled for the cluster. | `bool` | `false` | no |
 | <a name="input_is_warm_instance_enabled"></a> [is\_warm\_instance\_enabled](#input\_is\_warm\_instance\_enabled) | Indicates whether ultrawarm nodes are enabled for the cluster. | `bool` | `true` | no |
