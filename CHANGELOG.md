@@ -2,6 +2,18 @@
 
 All notable changes to this module will be documented in this file.
 
+## [v1.0.3] - 2022-12-22
+
+### Added
+
+- Add alarm.tf with default and custom opensearch alarms
+- Add following vars
+    - is_enable_default_alarms
+    - default_alarm_actions
+    - default_ok_actions
+    - custom_rds_alarms_configure
+    - event_categories
+
 ## [v1.0.2] - 2022-11-08
 
 ### Added
