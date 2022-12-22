@@ -11,8 +11,7 @@ All notable changes to this module will be documented in this file.
     - is_enable_default_alarms
     - default_alarm_actions
     - default_ok_actions
-    - custom_rds_alarms_configure
-    - event_categories
+    - custom_opensearch_alarms_configure
 
 ## [v1.0.2] - 2022-11-08
 
