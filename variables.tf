@@ -184,6 +184,12 @@ variable "is_create_security_group" {
   default     = true
 }
 
+variable "is_enable_internet_access" {
+  description = "Determines whether to enable the outbound internet access"
+  type        = bool
+  default     = false
+}
+
 variable "additional_opensearch_security_group_ingress_rules" {
   type = list(object({
     from_port                = number

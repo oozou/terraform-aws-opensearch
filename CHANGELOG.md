@@ -2,6 +2,14 @@
 
 All notable changes to this module will be documented in this file.
 
+## [1.0.4] - 2023-01-05
+
+### Added
+
+- variables
+  - is_enable_internet_access: option to enable/disable the outbound internet access, disable by default.
+
+
 ## [v1.0.3] - 2022-12-22
 
 ### Added
