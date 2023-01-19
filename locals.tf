@@ -8,7 +8,7 @@ locals {
     },
     var.tags,
   )
-  identifier = format("%s-%s-%s-opensearch", var.prefix, var.environment, "test")
+  identifier = format("%s-%s-%s-opensearch", var.prefix, var.environment, var.cluster_name)
 
   /* -------------------------------------------------------------------------- */
   /*                                    Alarms                                  */
