@@ -9,6 +9,14 @@ All notable changes to this module will be documented in this file.
 - variables
   - is_enable_internet_access: option to enable/disable the outbound internet access, disable by default.
 
+### Changed
+
+- locals
+  - update local identifier to includer cluster name
+
+- main
+  - update domain_name to use local identifier with prefix env information
+
 
 ## [v1.0.3] - 2022-12-22
 
