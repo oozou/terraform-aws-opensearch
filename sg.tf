@@ -42,7 +42,7 @@ resource "aws_security_group_rule" "additional_opensearch_ingress" {
 }
 
 resource "aws_security_group_rule" "to_internet" {
-  count = var.is_create_security_group ? 1 : 0
+  count = var.is_create_security_group && var.is_enable_internet_access ? 1 : 0
 
   type              = "egress"
   from_port         = -1

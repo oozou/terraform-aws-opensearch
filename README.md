@@ -113,6 +113,7 @@ module "opensearch" {
 | <a name="input_is_custom_endpoint_enabled"></a> [is\_custom\_endpoint\_enabled](#input\_is\_custom\_endpoint\_enabled) | Whether to enable custom endpoint for the OpenSearch domain. | `bool` | `false` | no |
 | <a name="input_is_ebs_enabled"></a> [is\_ebs\_enabled](#input\_is\_ebs\_enabled) | if true will add ebs | `bool` | `false` | no |
 | <a name="input_is_enable_default_alarms"></a> [is\_enable\_default\_alarms](#input\_is\_enable\_default\_alarms) | if enable the default alarms | `bool` | `false` | no |
+| <a name="input_is_enable_internet_access"></a> [is\_enable\_internet\_access](#input\_is\_enable\_internet\_access) | Determines whether to enable the outbound internet access | `bool` | `false` | no |
 | <a name="input_is_internal_user_database_enabled"></a> [is\_internal\_user\_database\_enabled](#input\_is\_internal\_user\_database\_enabled) | Whether the internal user database is enabled | `bool` | `true` | no |
 | <a name="input_is_master_instance_enabled"></a> [is\_master\_instance\_enabled](#input\_is\_master\_instance\_enabled) | Indicates whether dedicated master nodes are enabled for the cluster. | `bool` | `false` | no |
 | <a name="input_is_warm_instance_enabled"></a> [is\_warm\_instance\_enabled](#input\_is\_warm\_instance\_enabled) | Indicates whether ultrawarm nodes are enabled for the cluster. | `bool` | `true` | no |
