@@ -8,7 +8,7 @@ resource "aws_opensearch_domain" "this" {
     aws_iam_service_linked_role.this[0],
   ]
 
-  domain_name     = locals.identifier
+  domain_name     = local.identifier
   engine_version  = var.cluster_version
   access_policies = data.aws_iam_policy_document.access_policy.json
 
