@@ -148,12 +148,54 @@ CONFIG
 /* -------------------------------------------------------------------------- */
 /*                                 Cloudwatch                                 */
 /* -------------------------------------------------------------------------- */
+data "aws_iam_policy_document" "cloudwatch_log_group_kms_policy" {
+  statement {
+    sid = "AllowCloudWatchToDoCryptography"
+    actions = [
+      "kms:Encrypt*",
+      "kms:Decrypt*",
+      "kms:ReEncrypt*",
+      "kms:GenerateDataKey*",
+      "kms:Describe*"
+    ]
+    resources = ["*"]
+
+    principals {
+      type        = "Service"
+      identifiers = tolist([format("logs.%s.amazonaws.com", data.aws_region.this.name)])
+    }
+
+    condition {
+      test     = "ArnEquals"
+      variable = "kms:EncryptionContext:aws:logs:arn"
+      # values   = [format("arn:aws:logs:%s:%s:log-group:/aws/opensearch/%s/%s", data.aws_region.this.name, data.aws_caller_identity.this.account_id, local.identifier)]
+      values = formatlist(format("arn:aws:logs:%s:%s:log-group:/aws/opensearch/%s/%%s", data.aws_region.this.name, data.aws_caller_identity.this.account_id, local.identifier), var.enabled_cloudwatch_logs_exports)
+    }
+  }
+}
+
+module "cloudwatch_log_group_kms" {
+  count   = length(var.enabled_cloudwatch_logs_exports) > 0 && var.is_create_default_kms && length(var.encrypt_kms_key_id) == 0 ? 1 : 0
+  source  = "oozou/kms-key/aws"
+  version = "1.0.0"
+
+  prefix               = var.prefix
+  environment          = var.environment
+  name                 = format("%s-opensearch-log-group", var.name)
+  key_type             = "service"
+  append_random_suffix = true
+  description          = format("Secure Secrets Manager's service secrets for service %s", local.identifier)
+  additional_policies  = [data.aws_iam_policy_document.cloudwatch_log_group_kms_policy.json]
+
+  tags = merge(local.tags, { "Name" : format("%s-opensearch-log-group", local.identifier) })
+}
+
 resource "aws_cloudwatch_log_group" "this" {
   for_each = toset(var.enabled_cloudwatch_logs_exports)
 
   name              = format("/aws/opensearch/%s/%s", local.identifier, each.value)
   retention_in_days = var.cloudwatch_log_retention_in_days
-  kms_key_id        = var.cloudwatch_log_kms_key_id
+  kms_key_id        = local.cloudwatch_log_group_kms_key_arn
 
   tags = merge(
     local.tags,
