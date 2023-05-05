@@ -13,7 +13,7 @@ resource "aws_opensearch_domain" "this" {
 
   domain_name     = local.identifier
   engine_version  = var.cluster_version
-  access_policies = data.aws_iam_policy_document.access_policy.json
+  access_policies = null
 
   cluster_config {
     dedicated_master_enabled = var.is_master_instance_enabled
@@ -99,7 +99,11 @@ resource "aws_opensearch_domain" "this" {
     },
     local.tags
   )
+}
 
+resource "aws_opensearch_domain_policy" "this" {
+  domain_name     = aws_opensearch_domain.this.domain_name
+  access_policies = data.aws_iam_policy_document.access_policy.json
 }
 
 resource "aws_route53_record" "this" {
