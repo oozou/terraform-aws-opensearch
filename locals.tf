@@ -10,15 +10,15 @@ locals {
   )
   identifier = format("%s-%s-%s-opensearch", var.prefix, var.environment, var.cluster_name)
 
-  /* -------------------------------------------------------------------------- */
-  /*                                    Alarms                                  */
-  /* -------------------------------------------------------------------------- */
-    comparison_operators = {
-      ">=" = "GreaterThanOrEqualToThreshold",
-      ">"  = "GreaterThanThreshold",
-      "<"  = "LessThanThreshold",
-      "<=" = "LessThanOrEqualToThreshold",
-    }
+  cloudwatch_log_group_kms_key_arn = var.cloudwatch_log_group_kms_key_arn != null ? var.cloudwatch_log_group_kms_key_arn : var.is_create_default_kms && length(enabled_cloudwatch_logs_exports) > 0 ? module.cloudwatch_log_group_kms[0].key_arn : null
+
+  /* --------------------------------- Alarms --------------------------------- */
+  comparison_operators = {
+    ">=" = "GreaterThanOrEqualToThreshold",
+    ">"  = "GreaterThanThreshold",
+    "<"  = "LessThanThreshold",
+    "<=" = "LessThanOrEqualToThreshold",
+  }
 
 }
 

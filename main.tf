@@ -28,6 +28,7 @@ resource "aws_opensearch_domain" "this" {
 
     dynamic "zone_awareness_config" {
       for_each = (var.availability_zones > 1) ? [var.availability_zones] : []
+
       content {
         availability_zone_count = zone_awareness_config.value
       }
@@ -36,17 +37,16 @@ resource "aws_opensearch_domain" "this" {
 
   dynamic "log_publishing_options" {
     for_each = aws_cloudwatch_log_group.this
+
     content {
       cloudwatch_log_group_arn = log_publishing_options.value.arn
-      log_type                 = "${lookup(log_publishing_options.value.tags, "Type")}" 
-
+      log_type                 = lookup(log_publishing_options.value.tags, "Type")
     }
-    
-    
   }
 
   dynamic "vpc_options" {
     for_each = var.vpc_id == null ? [] : [1]
+
     content {
       subnet_ids         = var.subnets_ids
       security_group_ids = [aws_security_group.this[0].id]
@@ -54,13 +54,13 @@ resource "aws_opensearch_domain" "this" {
   }
 
   ebs_options {
-    ebs_enabled   = var.is_ebs_enabled 
-    volume_size   = var.volume_size
-    volume_type   = var.volume_type 
-    iops          = var.iops
-    throughput    = var.throughput      
+    ebs_enabled = var.is_ebs_enabled
+    volume_size = var.volume_size
+    volume_type = var.volume_type
+    iops        = var.iops
+    throughput  = var.throughput
   }
-    
+
   advanced_security_options {
     enabled                        = true
     internal_user_database_enabled = var.is_internal_user_database_enabled
@@ -72,6 +72,13 @@ resource "aws_opensearch_domain" "this" {
     }
   }
 
+  ebs_options {
+    ebs_enabled = var.is_ebs_enabled
+    volume_size = var.volume_size
+    volume_type = var.volume_type
+    iops        = var.iops
+    throughput  = var.throughput
+  }
 
   domain_endpoint_options {
     enforce_https       = true
@@ -138,20 +145,19 @@ resource "aws_cloudwatch_log_resource_policy" "example" {
 CONFIG
 }
 
-
 /* -------------------------------------------------------------------------- */
 /*                                 Cloudwatch                                 */
 /* -------------------------------------------------------------------------- */
-
-
 resource "aws_cloudwatch_log_group" "this" {
   for_each = toset(var.enabled_cloudwatch_logs_exports)
+
   name              = format("/aws/opensearch/%s/%s", local.identifier, each.value)
   retention_in_days = var.cloudwatch_log_retention_in_days
   kms_key_id        = var.cloudwatch_log_kms_key_id
 
-  tags = merge(local.tags, 
-                { "Name" = format("%s_%s", local.identifier, each.value) },
-                { "Type" = each.value }
-              )
+  tags = merge(
+    local.tags,
+    { "Name" = format("%s_%s", local.identifier, each.value) },
+    { "Type" = each.value }
+  )
 }
