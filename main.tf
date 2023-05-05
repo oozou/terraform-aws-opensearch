@@ -75,14 +75,6 @@ resource "aws_opensearch_domain" "this" {
     }
   }
 
-  ebs_options {
-    ebs_enabled = var.is_ebs_enabled
-    volume_size = var.volume_size
-    volume_type = var.volume_type
-    iops        = var.iops
-    throughput  = var.throughput
-  }
-
   domain_endpoint_options {
     enforce_https       = true
     tls_security_policy = "Policy-Min-TLS-1-2-2019-07"
