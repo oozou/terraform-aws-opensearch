@@ -1,3 +1,6 @@
+data "aws_region" "this" {}
+data "aws_caller_identity" "this" {}
+
 resource "aws_iam_service_linked_role" "this" {
   count            = var.is_create_service_role ? 1 : 0
   aws_service_name = "opensearchservice.amazonaws.com"
@@ -181,7 +184,7 @@ module "cloudwatch_log_group_kms" {
 
   prefix               = var.prefix
   environment          = var.environment
-  name                 = format("%s-opensearch-log-group", var.name)
+  name                 = format("%s-opensearch-log-group", var.cluster_name)
   key_type             = "service"
   append_random_suffix = true
   description          = format("Secure Secrets Manager's service secrets for service %s", local.identifier)
