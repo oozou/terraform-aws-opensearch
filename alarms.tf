@@ -125,4 +125,3 @@ resource "aws_cloudwatch_metric_alarm" "opensearch_health_alarm" {
 
   tags = merge(local.tags, { Name = format("%s-%s-alarm", local.identifier, "opensearch_health") })
 }
-
