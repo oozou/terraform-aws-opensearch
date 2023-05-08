@@ -117,7 +117,7 @@ resource "aws_route53_record" "this" {
 }
 
 resource "aws_cloudwatch_log_resource_policy" "example" {
-  policy_name = "example"
+  policy_name = format("%s-access-cloudwatch-policy", local.identifier)
 
   policy_document = <<CONFIG
 {
