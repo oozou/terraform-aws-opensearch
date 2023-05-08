@@ -56,6 +56,8 @@ resource "aws_cloudwatch_metric_alarm" "opensearch_cpu_alarm" {
     ClientId   = data.aws_caller_identity.current.account_id
     DomainName = aws_opensearch_domain.this.domain_name
   }
+
+  tags = merge(local.tags, { Name = format("%s-%s-alarm", local.identifier, "opensearch_high_CPU") })
 }
 
 resource "aws_cloudwatch_metric_alarm" "opensearch_memory_alarm" {
@@ -76,6 +78,8 @@ resource "aws_cloudwatch_metric_alarm" "opensearch_memory_alarm" {
     ClientId   = data.aws_caller_identity.current.account_id
     DomainName = aws_opensearch_domain.this.domain_name
   }
+
+  tags = merge(local.tags, { Name = format("%s-%s-alarm", local.identifier, "opensearch_high_memory") })
 }
 
 resource "aws_cloudwatch_metric_alarm" "opensearch_storage_low_alarm" {
@@ -96,6 +100,8 @@ resource "aws_cloudwatch_metric_alarm" "opensearch_storage_low_alarm" {
     ClientId   = data.aws_caller_identity.current.account_id
     DomainName = aws_opensearch_domain.this.domain_name
   }
+
+  tags = merge(local.tags, { Name = format("%s-%s-alarm", local.identifier, "opensearch_low_storage") })
 }
 
 resource "aws_cloudwatch_metric_alarm" "opensearch_health_alarm" {
@@ -116,5 +122,7 @@ resource "aws_cloudwatch_metric_alarm" "opensearch_health_alarm" {
     ClientId   = data.aws_caller_identity.current.account_id
     DomainName = aws_opensearch_domain.this.domain_name
   }
+
+  tags = merge(local.tags, { Name = format("%s-%s-alarm", local.identifier, "opensearch_health") })
 }
 

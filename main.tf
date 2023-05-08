@@ -116,10 +116,6 @@ resource "aws_route53_record" "this" {
   records = [aws_opensearch_domain.this.endpoint]
 }
 
-resource "aws_cloudwatch_log_group" "example" {
-  name = "example"
-}
-
 resource "aws_cloudwatch_log_resource_policy" "example" {
   policy_name = "example"
 
