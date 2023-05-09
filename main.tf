@@ -116,28 +116,27 @@ resource "aws_route53_record" "this" {
   records = [aws_opensearch_domain.this.endpoint]
 }
 
-resource "aws_cloudwatch_log_resource_policy" "example" {
-  policy_name = format("%s-access-cloudwatch-policy", local.identifier)
+data "aws_iam_policy_document" "os_access_cloudwatch_policy" {
+  statement {
+    sid = "AllowCloudWatchToDoCryptography"
+    actions = [
+      "logs:PutLogEvents",
+      "logs:PutLogEventsBatch",
+      "logs:CreateLogStream"
+    ]
+    resources = [format("arn:aws:logs:%s:%s:log-group:/aws/opensearch/%s/*:*", data.aws_region.this.name, data.aws_caller_identity.this.account_id, local.identifier)]
 
-  policy_document = <<CONFIG
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "es.amazonaws.com"
-      },
-      "Action": [
-        "logs:PutLogEvents",
-        "logs:PutLogEventsBatch",
-        "logs:CreateLogStream"
-      ],
-      "Resource": ${format("arn:aws:logs:%s:%s:log-group:/aws/opensearch/%s/*", data.aws_region.this.name, data.aws_caller_identity.this.account_id, local.identifier)}
+    principals {
+      type        = "Service"
+      identifiers = "es.amazonaws.com"
     }
-  ]
+  }
 }
-CONFIG
+
+resource "aws_cloudwatch_log_resource_policy" "os_access_cloudwatch_policy" {
+  policy_name = format("%s-access-cloudwatch-lg-policy", local.identifier) # Remove lg
+
+  policy_document = data.aws_iam_policy_document.os_access_cloudwatch_policy.json
 }
 
 /* -------------------------------------------------------------------------- */
