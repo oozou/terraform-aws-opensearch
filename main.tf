@@ -128,7 +128,7 @@ data "aws_iam_policy_document" "os_access_cloudwatch_policy" {
 
     principals {
       type        = "Service"
-      identifiers = "es.amazonaws.com"
+      identifiers = ["es.amazonaws.com"]
     }
   }
 }
