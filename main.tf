@@ -134,7 +134,7 @@ data "aws_iam_policy_document" "os_access_cloudwatch_policy" {
 }
 
 resource "aws_cloudwatch_log_resource_policy" "os_access_cloudwatch_policy" {
-  policy_name = format("%s-access-cloudwatch-lg-policy", local.identifier) # Remove lg
+  policy_name = format("%s-access-cloudwatch-policy", local.identifier)
 
   policy_document = data.aws_iam_policy_document.os_access_cloudwatch_policy.json
 }
