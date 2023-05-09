@@ -133,7 +133,7 @@ resource "aws_cloudwatch_log_resource_policy" "example" {
         "logs:PutLogEventsBatch",
         "logs:CreateLogStream"
       ],
-      "Resource": "arn:aws:logs:*"
+      "Resource": ${format("arn:aws:logs:%s:%s:log-group:/aws/opensearch/%s/*", data.aws_region.this.name, data.aws_caller_identity.this.account_id, local.identifier)}
     }
   ]
 }
