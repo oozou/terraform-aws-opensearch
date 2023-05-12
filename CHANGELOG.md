@@ -2,6 +2,29 @@
 
 All notable changes to this module will be documented in this file.
 
+## [1.0.5] - 2023-05-12
+
+### Added
+
+- Add `local.cloudwatch_log_group_kms_key_arn` to control logic selecting KMS key arn
+- Add tag to resource `aws_cloudwatch_metric_alarm.opensearch_health_alarm`
+- Add data source `aws_region.this` and `aws_caller_identity.this`
+- Add resource `aws_opensearch_domain_policy.this` to allow opensearch naming contain non alp
+- Add data `aws_iam_policy_document.os_access_cloudwatch_policy` to use with new resource `aws_cloudwatch_log_resource_policy.os_access_cloudwatch_policy`
+- Add log group encryption with related resources
+  - Data `os_access_cloudwatch_policy.cloudwatch_log_group_kms_policy`
+  - Module `cloudwatch_log_group_kms`
+
+### Changed
+
+- Update resource naming in data `aws_iam_policy_document.access_policy` to use `local.identifier`
+- Set attribute `aws_iam_service_linked_role.this.access_policies` to null
+- Update resource `aws_cloudwatch_log_group.this`'s attribute to use `local.cloudwatch_log_group_kms_key_arn`
+
+### Removed
+
+- Remove `aws_cloudwatch_log_group.example` since there's no usage
+
 ## [1.0.4] - 2023-01-05
 
 ### Added
