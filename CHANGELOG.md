@@ -2,6 +2,11 @@
 
 All notable changes to this module will be documented in this file.
 
+## [1.0.6] - 2023-06-09
+
+### Changed
+- Update master_instance_type var condition to allow other instance types
+
 ## [1.0.5] - 2023-05-12
 
 ### Added
