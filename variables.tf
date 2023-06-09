@@ -61,7 +61,7 @@ variable "master_instance_type" {
   default     = "c6g.large.search"
 
   validation {
-    condition     = can(regex("^[r6g|c6g|m6g|r6gd]", var.master_instance_type))
+    condition     = can(regex("^[t3|i3|c5|m5|r5|r6g|c6g|m6g|r6gd]", var.hot_instance_type))
     error_message = "The EC2 master_instance_type must provide a SSD or NVMe-based local storage."
   }
 }
