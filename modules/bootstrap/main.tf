@@ -1,6 +1,6 @@
 module "ec2" {
   source                      = "oozou/ec2-instance/aws"
-  version                     = "1.0.5"
+  version                     = "1.0.6"
   prefix                      = var.prefix
   environment                 = var.environment
   name                        = "os-bootstrap"
